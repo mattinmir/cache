@@ -9,13 +9,13 @@ class memory
 public:
 	memory(
 		unsigned int addr_bits, // Size of the memory is 1 << addr_bits
-		unsigned int word_length = 32 // Number of bits in each word i.e. in each element of vector
+		unsigned int word_length // Number of bits in each word i.e. in each element of vector
 		);
 	
 	sim_error read(
 		unsigned int address, // Starting byte address of read
 		unsigned int &data, // Variable to store read output in
-		unsigned int size = 4 // Number of bytes to read
+		unsigned int size // Number of bytes to read
 		);
 
 	sim_error write(

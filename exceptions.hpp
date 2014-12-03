@@ -5,8 +5,11 @@ typedef enum _sim_error
 {
 	Success = 0,
 
-	AddressOutOfRange = 0x100 
-
+	//Errors with the input syntax
+	Error_InvalidRequest = 0x100,
+	Error_AddressOutOfRange = 0x101,
+	Error_DataExceedsMemoryWidth = 0x102
+	
 
 
 }sim_error;

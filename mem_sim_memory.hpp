@@ -3,6 +3,7 @@
 
 #include <vector>
 #include "exceptions.hpp"
+#include <stdint.h>
 
 class memory
 {
@@ -26,7 +27,7 @@ public:
 	sim_error reset(); // Set all locations to 0
 
 private:
-	std::vector<unsigned int> mem; // Resize appropriately with vector::resize
+	std::vector<uint8_t> mem; // Resize appropriately with vector::resize
 };
 
 

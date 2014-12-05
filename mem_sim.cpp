@@ -1,6 +1,10 @@
 #include <iostream>
 #include <string>
 #include "exceptions.hpp"
+#include "cache.hpp"
+
+#define DEBUG_LEVEL 0
+
 using namespace std;
 
 int main(int argc, char* argv[])
@@ -14,13 +18,15 @@ int main(int argc, char* argv[])
 	unsigned int cycles_per_read_block = *argv[7] - '0';
 	unsigned int cycles_per_write_block = *argv[8] - '0';
 
-	bool finished = false;
+	cache cache(2, cycles_per_hit, cycles_per_read_block, cycles_per_write_block);
+
+	unsigned int address = 0;
+	unsigned int data = 0;
 	string cmd;
+	sim_error error = Success;
+	bool finished = false;
 	while (!finished)
 	{
-		unsigned int address = 0;
-		unsigned int data = 0;
-
 		cin >> cmd;
 
 		if (cmd.empty())
@@ -29,7 +35,7 @@ int main(int argc, char* argv[])
 		else if (cmd == "read-req")
 		{
 			cin >> address;
-			cout << address << endl;
+			
 		}			
 		else if (cmd == "write-req")
 		{
@@ -43,6 +49,9 @@ int main(int argc, char* argv[])
 			;
 		else 
 			return Error_InvalidRequest; // For invalid input
+
+		if (error)
+			return error;
 	}
 
 	return 0;

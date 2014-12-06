@@ -28,13 +28,12 @@ int main(int argc, char* argv[])
 
 		else if (cmd == "read-req")
 		{
-			cin >> address;
-			cout << address << endl;
+			
 		}			
 		else if (cmd == "write-req")
 		{
 			cin >> address >> data;
-			cout << address << data << endl;
+			
 		}
 			
 		else if (cmd == "flush-req")

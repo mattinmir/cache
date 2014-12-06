@@ -1,0 +1,11 @@
+write-ack 0 miss 3
+write-ack 0 miss 5
+write-ack 1 miss 3
+write-ack 1 hit 1
+read-ack 0 miss 5 0001
+flush-ack 2
+write-ack 0 miss 3
+debug-ack-begin 
+debug-ack-end
+read-ack 1 hit 4444
+write-ack 0 miss 4

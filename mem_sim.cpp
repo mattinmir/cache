@@ -1,6 +1,11 @@
 #include <iostream>
 #include <string>
-#include "exceptions.hpp"
+#include <stdint.h>
+#include "mem_sim_exceptions.hpp"
+#include "mem_sim_cache.hpp"
+
+#define DEBUG_LEVEL 0
+
 using namespace std;
 
 int main(int argc, char* argv[])
@@ -14,13 +19,17 @@ int main(int argc, char* argv[])
 	unsigned int cycles_per_read_block = *argv[7] - '0';
 	unsigned int cycles_per_write_block = *argv[8] - '0';
 
-	bool finished = false;
+	//cache c(address_bits, bytes_per_word, words_per_block, blocks_per_set, sets_per_cache, cycles_per_hit, cycles_per_read_block, cycles_per_write_block);
+
+	unsigned int address;
+	unsigned int data;
 	string cmd;
+	sim_error error = Success;
+	bool finished = false;
 	while (!finished)
 	{
-		unsigned int address = 0;
-		unsigned int data = 0;
-
+		address = 0;
+		data = 0;
 		cin >> cmd;
 
 		if (cmd.empty())
@@ -28,20 +37,27 @@ int main(int argc, char* argv[])
 
 		else if (cmd == "read-req")
 		{
-			
+			cin >> address;
+			//error = c.read(address, data, bytes_per_word);
 		}			
 		else if (cmd == "write-req")
 		{
 			cin >> address >> data;
-			
+			//error = c.write(address, data);
 		}
-			
 		else if (cmd == "flush-req")
 			;
+			//c.flush();
+
 		else if (cmd == "debug-req")
 			;
+			//c.debug(DEBUG_LEVEL);
+
 		else 
 			return Error_InvalidRequest; // For invalid input
+
+		if (error)
+			return error;
 	}
 
 	return 0;

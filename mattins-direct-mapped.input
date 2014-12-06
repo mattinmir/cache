@@ -1,0 +1,16 @@
+# This is an input I have created, with corresponding output to test if I understand how the cache works properly. Let me know if I messed up.
+# Using read response b
+#
+# 8 bit addresses
+# 2 Bytes/word, 2 words/block, 1 block/set, 2 sets/cache
+# 1 cycle/hit, 2 cycles/read, 2 cycles/write
+write-req 8 0001
+write-req 18 4321
+write-req 4 4444
+write-req 6 6666
+read-req 8
+flush-req
+write-req 18 0987
+debug-req
+read-req 4
+write-req 8 0001

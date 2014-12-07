@@ -14,13 +14,12 @@ public:
 	
 	sim_error read(
 		const unsigned int address, // Starting byte address of read
-		unsigned int &data, // Variable to store read output in
-		const unsigned int length // Number of bytes to read
+		std::vector<unsigned int> &data // Variable to store read output in
 		) const;
 
 	sim_error write(
 		const unsigned int address, // Starting address of write
-		const unsigned int &data // Data to write to memory - program will write as many bytes as there are in data
+		const std::vector<unsigned int> &data // Data to write to memory - program will write as many bytes as there are in data
 		);
 
 	sim_error reset(); // Set all locations to 0

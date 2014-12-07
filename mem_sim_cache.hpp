@@ -23,25 +23,41 @@ public:
 
 	sim_error read(
 		const unsigned int address, // Starting byte address of read
-		unsigned int &data, // Variable to store read output in
-		const unsigned int length // Number of bytes to read
+		std::vector<unsigned int> &data, // Variable to store read output in
+		unsigned int &time // How many cycles the operation took
 		) const;
 
 	sim_error write(
 		const unsigned int address, // Starting address of write
-		const unsigned int &data // Data to write to memory - program will write as many bytes as there are in data
+		const  std::vector<unsigned int> &data, // Data to write to memory - program will write as many bytes as there are in data
+		unsigned int &time // How many cycles the operation took
 		);
 
-	sim_error flush();
+	sim_error flush(
+		unsigned int &time // How many cycles the operation took
+		);
 
 	sim_error debug(unsigned int debug_level);
 
 	sim_error reset(); // Set all locations to 0
 
 private:
+	unsigned int word_size;
+	unsigned int block_size;
+	unsigned int set_size;
 	unsigned int cache_size;
+	unsigned int hit_time;
+	unsigned int read_time;
+	unsigned int write_time;
 	std::vector<set> sets; 
 	memory mem;
+
+	//Sizes in bits of different parts of address
+	unsigned int byte_index_size;
+	unsigned int word_index_size;
+	unsigned int block_index_size;
+	unsigned int set_index_size;
+	unsigned int tag_size;
 };
 
 

@@ -3,19 +3,26 @@
 #include <vector>
 #include <stdint.h>
 
+
 word::word(const unsigned int iword_size) : word_size(iword_size)
 {
 	bytes.assign(iword_size, 0);
 }
 
-sim_error word::read(const unsigned int byte_index, unsigned int data[], const unsigned int length) const
+sim_error word::read(unsigned int &data) const
 {
-	if ((byte_index + length) >= word_size)
-		return Error_IteratorExceedsContainerSize;
+	data = 0;
+	for (unsigned int i = 0; i < bytes.size(); i++)
+		data |= bytes[i] << (i * 8);
 	
+	
+	return Success;
+}
 
-	for (int i = byte_index, j = 0; i < (byte_index + length); i++, j++)
-		data[j] = bytes[i];
+sim_error word::write(const unsigned int &data)
+{
+	for (unsigned int i = 0; i < bytes.size(); i++)
+		bytes[i] = data >> (i * 8);
 
 	return Success;
 }

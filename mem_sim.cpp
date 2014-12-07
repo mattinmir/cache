@@ -19,7 +19,7 @@ int main(int argc, char* argv[])
 	unsigned int cycles_per_read_block = *argv[7] - '0';
 	unsigned int cycles_per_write_block = *argv[8] - '0';
 
-	//cache c(address_bits, bytes_per_word, words_per_block, blocks_per_set, sets_per_cache, cycles_per_hit, cycles_per_read_block, cycles_per_write_block);
+	cache c(address_bits, bytes_per_word, words_per_block, blocks_per_set, sets_per_cache, cycles_per_hit, cycles_per_read_block, cycles_per_write_block);
 
 	unsigned int address;
 	unsigned int data;

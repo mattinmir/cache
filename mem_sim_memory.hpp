@@ -14,7 +14,7 @@ public:
 	
 	sim_error read(
 		const unsigned long long int address, // Starting byte address of read
-		std::vector<unsigned long long int> &data // Variable to store read output in
+		std::vector<uint8_t> &data // Variable to store read output in
 		) const;
 
 	sim_error write(

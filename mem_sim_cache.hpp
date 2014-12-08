@@ -55,7 +55,6 @@ private:
 	//Sizes in bits of different parts of address
 	unsigned long long int byte_index_size;
 	unsigned long long int word_index_size;
-	unsigned long long int block_index_size;
 	unsigned long long int set_index_size;
 	unsigned long long int tag_size;
 };

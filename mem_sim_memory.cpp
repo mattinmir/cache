@@ -7,7 +7,7 @@ memory::memory(unsigned long long int addr_bits)
 	mem.assign(1 << addr_bits, 0);
 }
 
-sim_error memory::read(const unsigned long long int address, std::vector<unsigned long long int> &data) const
+sim_error memory::read(const unsigned long long int address, std::vector<uint8_t> &data) const
 {
 	if (address > mem.size())
 		return Error_AddressOutOfRange;

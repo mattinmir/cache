@@ -1,6 +1,7 @@
 #include "mem_sim_cache.hpp"
 #include "mem_sim_set.hpp"
 #include "mem_sim_exceptions.hpp"
+#include "mem_sim_utils.hpp"
 #include <cmath>
 #include <vector>
 
@@ -24,9 +25,8 @@ cache::cache(
 	mem(memory(imemory_size)),
 	byte_index_size(log2(iword_size)), 
 	word_index_size(log2(iblock_size)),
-	block_index_size(log2(iset_size)),
 	set_index_size(log2(icache_size)), 
-	tag_size(imemory_size - (byte_index_size + word_index_size + block_index_size + set_index_size))
+	tag_size(imemory_size - (byte_index_size + word_index_size + set_index_size))
 {
 	sets.assign(iset_size, set(iword_size, iblock_size, iset_size));
 }
@@ -42,20 +42,20 @@ sim_error cache::read(const unsigned long long int address, std::vector<unsigned
 				|_____|___________|____________|____________|
 
 	*/
-	unsigned long long int set_index = (address & (unsigned long long int)(pow(2, set_index_size) - 1) << (byte_index_size + word_index_size + block_index_size)) >> (byte_index_size + word_index_size + block_index_size);
-	unsigned long long int tag = (address & (unsigned long long int)(pow(2, tag_size) - 1) << (byte_index_size + word_index_size + block_index_size + set_index_size)) >> (byte_index_size + word_index_size + block_index_size + set_index_size);
+	unsigned long long int set_index = (address & (unsigned long long int)(pow(2, set_index_size) - 1) << (byte_index_size + word_index_size)) >> (byte_index_size + word_index_size);
+	unsigned long long int tag = (address & (unsigned long long int)(pow(2, tag_size) - 1) << (byte_index_size + word_index_size + set_index_size)) >> (byte_index_size + word_index_size + set_index_size);
 	
 	sim_error error = sets[set_index].read(tag, data);
 
 	if (error == CacheMiss)
 	{
-		std::vector<unsigned long long int> old_block(word_size * block_size);
-		std::vector<unsigned long long int> new_block(word_size * block_size);
+		std::vector<unsigned long long int> old_block(block_size);
+		std::vector<uint8_t> new_block_bytes(word_size * block_size);
 		bool flush_needed;
 
-		error = mem.read(address, new_block);
+		error = mem.read(address, new_block_bytes);
 
-		sets[set_index].replace_LRU_block(new_block, old_block, flush_needed);
+		sets[set_index].replace_LRU_block(bytes_to_words(new_block_bytes, word_size), old_block, flush_needed);
 
 
 	}

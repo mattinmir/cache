@@ -2,15 +2,15 @@
 #include "mem_sim_block.hpp"
 #include "mem_sim_exceptions.hpp"
 
-set::set(const unsigned int iword_size, const unsigned int iblock_size, const unsigned int iset_size) : set_size(iset_size)
+set::set(const unsigned long long int iword_size, const unsigned long long int iblock_size, const unsigned long long int iset_size) : set_size(iset_size)
 {
 	blocks.assign(iset_size, block(iword_size, iblock_size));
 }
 
-sim_error set::read(const unsigned int tag, std::vector<unsigned int> &data) const
+sim_error set::read(const unsigned long long int tag, std::vector<unsigned long long int> &data) const
 {
 	bool found = false;
-	unsigned int i;
+	unsigned long long int i;
 	for (i = 0; i < blocks.size() && !found; i++)
 	{
 		if (blocks[i].get_tag() == tag)
@@ -27,10 +27,10 @@ sim_error set::read(const unsigned int tag, std::vector<unsigned int> &data) con
 	return error;
 }
 
-sim_error set::write(const unsigned int tag, const std::vector<unsigned int> &data)
+sim_error set::write(const unsigned long long int tag, const std::vector<unsigned long long int> &data)
 {
 	bool found = false;
-	unsigned int i;
+	unsigned long long int i;
 	for (i = 0; i < blocks.size() && !found; i++)
 	{
 		if (blocks[i].get_tag() == tag)
@@ -47,16 +47,17 @@ sim_error set::write(const unsigned int tag, const std::vector<unsigned int> &da
 	return error;
 }
 
-unsigned int set::get_set_size() const
+unsigned long long int set::get_set_size() const
 {
 	return set_size;
 }
 
-sim_error set::replace_LRU_block(const std::vector<unsigned int> new_block, std::vector<unsigned int> &old_block, bool &flush_old_block)
+sim_error set::replace_LRU_block(const std::vector<unsigned long long int> new_block, std::vector<unsigned long long int> &old_block, bool &flush_old_block)
 {
 	sim_error error = Success;
-	unsigned int lru_index = 0;
-	for (unsigned int i = 1; i < blocks.size(); i++)
+	unsigned long long int lru_index = 0;
+	for (unsigned long long int i = 1; i < blocks.size(); i++)
+
 	{
 		if (blocks[i].get_age() > blocks[lru_index].get_age())
 			lru_index = i;

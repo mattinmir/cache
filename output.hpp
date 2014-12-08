@@ -6,24 +6,24 @@ public:
 	output(cache cache);
 
 	void read(
-		unsigned int set_index,
+		unsigned long long int set_index,
 		bool hit,
-		unsigned int time,
-		unsigned int data
+		unsigned long long int time,
+		unsigned long long int data
 		);
 
 	void write(
-		unsigned int set_index,
+		unsigned long long int set_index,
 		bool hit,
-		unsigned int time
+		unsigned long long int time
 		);
 
 	void flush(
-		unsigned int time
+		unsigned long long int time
 		);
 
 	void debug(
-		unsigned int debug_level
+		unsigned long long int debug_level
 		);
 
 private:

@@ -4,25 +4,25 @@
 #include <stdint.h>
 
 
-word::word(const unsigned int iword_size) : word_size(iword_size)
+word::word(const unsigned long long int iword_size) : word_size(iword_size)
 {
 	bytes.assign(iword_size, 0);
 }
 
-sim_error word::read(unsigned int &data) const
+sim_error word::read(unsigned long long int &data) const
 {
 	data = 0;
-	for (unsigned int i = 0; i < bytes.size(); i++)
-		data |= bytes[i] << (i * 8);
+	for (unsigned long long int i = 0; i < bytes.size(); i++)
+		data |= (unsigned long long int)bytes[i] << (i * 8);
 	
 	
 	return Success;
 }
 
-sim_error word::write(const unsigned int &data)
+sim_error word::write(const unsigned long long int &data)
 {
-	for (unsigned int i = 0; i < bytes.size(); i++)
-		bytes[i] = data >> (i * 8);
+	for (unsigned long long int i = 0; i < bytes.size(); i++)
+		bytes[i] = (data >> (i * 8)) & (1 << 8);
 
 	return Success;
 }

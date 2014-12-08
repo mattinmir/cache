@@ -3,6 +3,7 @@
 #include <stdint.h>
 #include "mem_sim_exceptions.hpp"
 #include "mem_sim_cache.hpp"
+#include <cstdlib>
 
 #define DEBUG_LEVEL 0
 
@@ -10,26 +11,29 @@ using namespace std;
 
 int main(int argc, char* argv[])
 {
-	unsigned int address_bits = *argv[1] - '0'; // - '0' to get the actual digit rather than the ASCII representation
-	unsigned int bytes_per_word = *argv[2] - '0';
-	unsigned int words_per_block = *argv[3] - '0';
-	unsigned int blocks_per_set = *argv[4] - '0';
-	unsigned int sets_per_cache = *argv[5] - '0';
-	unsigned int cycles_per_hit = *argv[6] - '0';
-	unsigned int cycles_per_read_block = *argv[7] - '0';
-	unsigned int cycles_per_write_block = *argv[8] - '0';
+	unsigned long long int address_bits = atoi(argv[1]); // - '0' to get the actual digit rather than the ASCII representation
+	unsigned long long int bytes_per_word = atoi(argv[2]);
+	unsigned long long int words_per_block = atoi(argv[3]);
+	unsigned long long int blocks_per_set = atoi(argv[4]);
+	unsigned long long int sets_per_cache = atoi(argv[5]);
+	unsigned long long int cycles_per_hit = atoi(argv[6]);
+	unsigned long long int cycles_per_read_block = atoi(argv[7]);
+	unsigned long long int cycles_per_write_block = atoi(argv[8]);
 
 	cache c(address_bits, bytes_per_word, words_per_block, blocks_per_set, sets_per_cache, cycles_per_hit, cycles_per_read_block, cycles_per_write_block);
 
-	unsigned int address;
-	unsigned int data;
+	unsigned long long int address;
+	unsigned long long int time;
+	string data;
 	string cmd;
 	sim_error error = Success;
 	bool finished = false;
 	while (!finished)
 	{
 		address = 0;
-		data = 0;
+		time = 0;
+		data = " ";
+
 		cin >> cmd;
 
 		if (cmd.empty())
@@ -43,7 +47,9 @@ int main(int argc, char* argv[])
 		else if (cmd == "write-req")
 		{
 			cin >> address >> data;
-			//error = c.write(address, data);
+
+
+			//error = c.write(address, data, time);
 		}
 		else if (cmd == "flush-req")
 			;

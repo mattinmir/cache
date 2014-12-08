@@ -9,17 +9,17 @@ class memory
 {
 public:
 	memory(
-		unsigned int addr_bits // Size of the memory is 2^addr_bits == 1 << addr_bits
+		unsigned long long int addr_bits // Size of the memory is 2^addr_bits == 1 << addr_bits
 		);
 	
 	sim_error read(
-		const unsigned int address, // Starting byte address of read
-		std::vector<unsigned int> &data // Variable to store read output in
+		const unsigned long long int address, // Starting byte address of read
+		std::vector<unsigned long long int> &data // Variable to store read output in
 		) const;
 
 	sim_error write(
-		const unsigned int address, // Starting address of write
-		const std::vector<unsigned int> &data // Data to write to memory - program will write as many bytes as there are in data
+		const unsigned long long int address, // Starting address of write
+		const std::vector<uint8_t> &data // Data to write to memory - program will write as many bytes as there are in data
 		);
 
 	sim_error reset(); // Set all locations to 0

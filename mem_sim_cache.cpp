@@ -5,14 +5,14 @@
 #include <vector>
 
 cache::cache(
-	const unsigned int imemory_size,
-	const unsigned int iword_size,
-	const unsigned int iblock_size,
-	const unsigned int iset_size,
-	const unsigned int icache_size,
-	const unsigned int ihit_time,
-	const unsigned int iread_time,
-	const unsigned int iwrite_time
+	const unsigned long long int imemory_size,
+	const unsigned long long int iword_size,
+	const unsigned long long int iblock_size,
+	const unsigned long long int iset_size,
+	const unsigned long long int icache_size,
+	const unsigned long long int ihit_time,
+	const unsigned long long int iread_time,
+	const unsigned long long int iwrite_time
 	) : 
 	word_size(iword_size),
 	block_size(iblock_size),
@@ -31,27 +31,26 @@ cache::cache(
 	sets.assign(iset_size, set(iword_size, iblock_size, iset_size));
 }
 
-sim_error cache::read(const unsigned int address, std::vector<unsigned int> &data, unsigned int &time) const
+sim_error cache::read(const unsigned long long int address, std::vector<unsigned long long int> &data, unsigned long long int &time) const
 {
 	/*
 					 set_index_size (bits)
 	                  <----------->
-				 __________________________________________________________
-				|     |           |             |            |            |
-	address:	| Tag | Set_Index | Block_index | Word_index | Byte_index |
-				|_____|___________|_____________|____________|____________|
+				 ___________________________________________
+				|     |           |            |            |
+	address:	| Tag | Set_Index | Word_index | Byte_index |
+				|_____|___________|____________|____________|
 
 	*/
-	unsigned int set_index = (address & (unsigned int)(pow(2, set_index_size) - 1) << (byte_index_size + word_index_size + block_index_size)) >> (byte_index_size + word_index_size + block_index_size);
-	unsigned int block_index = (address & (unsigned int)(pow(2, block_index_size) - 1) << (byte_index_size + word_index_size)) >> (byte_index_size + word_index_size);
-	unsigned int tag = (address & (unsigned int)(pow(2, tag_size) - 1) << (byte_index_size + word_index_size + block_index_size + set_index_size)) >> (byte_index_size + word_index_size + block_index_size + set_index_size);
+	unsigned long long int set_index = (address & (unsigned long long int)(pow(2, set_index_size) - 1) << (byte_index_size + word_index_size + block_index_size)) >> (byte_index_size + word_index_size + block_index_size);
+	unsigned long long int tag = (address & (unsigned long long int)(pow(2, tag_size) - 1) << (byte_index_size + word_index_size + block_index_size + set_index_size)) >> (byte_index_size + word_index_size + block_index_size + set_index_size);
 	
 	sim_error error = sets[set_index].read(tag, data);
 
 	if (error == CacheMiss)
 	{
-		std::vector<unsigned int> old_block(word_size * block_size);
-		std::vector<unsigned int> new_block(word_size * block_size);
+		std::vector<unsigned long long int> old_block(word_size * block_size);
+		std::vector<unsigned long long int> new_block(word_size * block_size);
 		bool flush_needed;
 
 		error = mem.read(address, new_block);

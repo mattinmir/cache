@@ -54,6 +54,7 @@ unsigned int set::get_set_size() const
 
 sim_error set::replace_LRU_block(const std::vector<unsigned int> new_block, std::vector<unsigned int> &old_block, bool &flush_old_block)
 {
+	sim_error error = Success;
 	unsigned int lru_index = 0;
 	for (unsigned int i = 1; i < blocks.size(); i++)
 	{
@@ -64,12 +65,13 @@ sim_error set::replace_LRU_block(const std::vector<unsigned int> new_block, std:
 	if (blocks[lru_index].is_dirty())
 	{
 		flush_old_block = true;
-		blocks[lru_index].read(old_block);
+		error = blocks[lru_index].read(old_block);
 	}
 	else
 		flush_old_block = false;
-	
-	blocks[lru_index].write(new_block); 
 
-	return Success;
+	if (!error)
+		error = blocks[lru_index].write(new_block); 
+
+	return error;
 }

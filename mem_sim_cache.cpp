@@ -61,15 +61,15 @@ sim_error cache::read(const unsigned long long int address, std::vector<unsigned
 		unsigned long long int old_block_tag;
 		bool flush_needed;
 
-		// Fetch new word from memory and read it out 
+		// Fetch new block from memory and read it out 
 		error = mem.read(address, new_block_bytes);
 		data = bytes_to_words(new_block_bytes, word_size);
 		time += read_time;
 		
-		// Also put the new word in the cache using LRU replacement 
+		// Also put the new block in the cache using LRU replacement 
 		if (!error)
 		{
-			error = sets[set_index].replace_LRU_block(bytes_to_words(new_block_bytes, word_size), old_block, old_block_tag, flush_needed);
+			error = sets[set_index].replace_LRU_block(bytes_to_words(new_block_bytes, word_size), tag, old_block, old_block_tag, flush_needed, "read");
 			time += hit_time;
 		}
 
@@ -110,14 +110,16 @@ sim_error cache::write(const unsigned long long int address, const std::vector<u
 		unsigned long long int old_block_tag;
 		bool flush_needed;
 
-		// Fetch new word from memory 
-		error = mem.read(address, new_block_bytes);
+		// Fetch new block from memory 
+		error = mem.read(address, new_block_bytes); 
 		time += read_time;
 
-		// Put the new word in the cache using LRU replacement 
+		// Insert the new word into the new block then put it in the cache using LRU replacement 
 		if (!error)
 		{
-			error = sets[set_index].replace_LRU_block(bytes_to_words(new_block_bytes, word_size), old_block, old_block_tag, flush_needed);
+			std::vector<unsigned long long int> new_block = bytes_to_words(new_block_bytes, word_size);
+			new_block[word_index] = data[0];
+			error = sets[set_index].replace_LRU_block(new_block, tag, old_block, old_block_tag, flush_needed, "write");
 			time += hit_time;
 		}
 

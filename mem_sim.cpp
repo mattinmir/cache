@@ -25,8 +25,9 @@ int main(int argc, char* argv[])
 
 	unsigned long long int address;
 	unsigned long long int time;
+	unsigned long long int dataout;
 	string hitmiss;
-	string data;
+	string datain;
 	string cmd;
 	sim_error error = Success;
 	bool finished = false;
@@ -34,7 +35,8 @@ int main(int argc, char* argv[])
 	{
 		address = 0;
 		time = 0;
-		data = "";
+		dataout = 0;
+		datain = "";
 		hitmiss = "";
 
 		cin >> cmd;
@@ -49,15 +51,15 @@ int main(int argc, char* argv[])
 			vector<unsigned long long int> data_vector(words_per_block);
 			error = c.read(address, data_vector, time, hitmiss);
 			unsigned long long int word_index = (address >> (unsigned long long int)log2(bytes_per_word)) % words_per_block;
-			data = to_string(data_vector[word_index]);
+			dataout = data_vector[word_index];
 
 			if (!error)
-				cout << "read-ack " << address << " " << hitmiss << " " << time << " " << data << endl;
+				cout << "read-ack " << address << " " << hitmiss << " " << time << " " << std::hex << dataout << endl;
 		}			
 		else if (cmd == "write-req")
 		{
-			cin >> address >> data;
-			vector<unsigned long long int> data_vector = { stoull(data, nullptr, 16) };
+			cin >> address >> datain;
+			vector<unsigned long long int> data_vector = { stoull(datain, nullptr, 16) };
 			error = c.write(address, data_vector, time, hitmiss);
 
 			if (!error)
@@ -66,10 +68,10 @@ int main(int argc, char* argv[])
 
 		else if (cmd == "flush-req")
 			;
-			//c.flush();
+		//c.flush();
 
 		else if (cmd == "debug-req")
-			;
+			cout << "debug-ack-begin" << endl << endl << "debug-ack-end" << endl;
 			//c.debug(DEBUG_LEVEL);
 
 		else 

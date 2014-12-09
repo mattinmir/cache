@@ -4,7 +4,7 @@
 #include "mem_sim_exceptions.hpp"
 #include <vector>
 #include "mem_sim_block.hpp"
-
+#include <string>
 
 
 class set
@@ -31,15 +31,19 @@ public:
 
 	sim_error replace_LRU_block(
 		const std::vector<unsigned long long int> new_block, // New block to be written into cache
+		const unsigned long long int new_block_tag, // Tag of new block to se can set the tag field of the block
 		std::vector<unsigned long long int> &old_block, // Return old block value so cache can write it back to memory
 		unsigned long long int &old_block_tag, // Tag of old block so we can put it back into memory if needed
-		bool &flush_old_block
+		bool &flush_old_block, // If there was a dirty block in the position, we must flush to memory
+		std::string access_type // If "read": dirty = false. if "write": dirty = true. Read-misses produce a clean block, whereas write-misses write to it after fetching from memory, dirtying it
 		);
 
 	unsigned long long int get_set_size() const;
 
 private:
 	unsigned long long int set_size;
+	unsigned long long int block_size;
+
 	std::vector<block> blocks; 
 };
 

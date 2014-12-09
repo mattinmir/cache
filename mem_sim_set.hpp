@@ -23,7 +23,8 @@ public:
 
 	sim_error write(
 		const unsigned long long int tag, // Starting block_index of write
-		const std::vector<unsigned long long int> &data // Data to write to memory - program will write as many words as there are in data
+		const std::vector<unsigned long long int> &data, // Data to write to memory - program will write as many words as there are in data
+		const unsigned long long int word_index
 		);
 
 	sim_error reset(); // Set all locations to 0

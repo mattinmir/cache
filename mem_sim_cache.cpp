@@ -4,6 +4,7 @@
 #include "mem_sim_utils.hpp"
 #include <cmath>
 #include <vector>
+#include <string>
 
 cache::cache(
 	const unsigned long long int imemory_size,
@@ -31,7 +32,7 @@ cache::cache(
 	sets.assign(icache_size, set(iword_size, iblock_size, iset_size));
 }
 
-sim_error cache::read(const unsigned long long int address, std::vector<unsigned long long int> &data, unsigned long long int &time)
+sim_error cache::read(const unsigned long long int address, std::vector<unsigned long long int> &data, unsigned long long int &time, std::string &hitmiss)
 {
 	/*
 					 set_index_size (bits)
@@ -52,6 +53,7 @@ sim_error cache::read(const unsigned long long int address, std::vector<unsigned
 
 	if (error == CacheMiss)
 	{
+		hitmiss = "miss";
 		error = Success;
 
 		std::vector<unsigned long long int> old_block(block_size);
@@ -80,21 +82,27 @@ sim_error cache::read(const unsigned long long int address, std::vector<unsigned
 		}
 	}
 	else
+	{
 		time += hit_time;
-
+		hitmiss = "hit";
+	}
+		
+		
 	return error;
 }
 
-sim_error cache::write(const unsigned long long int address, const std::vector<unsigned long long int> &data, unsigned long long int &time)
+sim_error cache::write(const unsigned long long int address, const std::vector<unsigned long long int> &data, unsigned long long int &time, std::string &hitmiss)
 {
+	unsigned long long int word_index = (address & (unsigned long long int)(pow(2, word_index_size) - 1) << (byte_index_size) >> byte_index_size);
 	unsigned long long int set_index = (address & (unsigned long long int)(pow(2, set_index_size) - 1) << (byte_index_size + word_index_size)) >> (byte_index_size + word_index_size);
 	unsigned long long int tag = (address & (unsigned long long int)(pow(2, tag_size) - 1) << (byte_index_size + word_index_size + set_index_size)) >> (byte_index_size + word_index_size + set_index_size);
 	time = 0;
 
-	sim_error error = sets[set_index].write(tag, data);
+	sim_error error = sets[set_index].write(tag, data, word_index);
 
 	if (error == CacheMiss)
 	{
+		hitmiss = "miss";
 		error = Success;
 
 		std::vector<unsigned long long int> old_block(block_size);
@@ -122,8 +130,13 @@ sim_error cache::write(const unsigned long long int address, const std::vector<u
 		}
 
 	}
+
 	else
+	{
 		time += hit_time;
+		hitmiss = "hit";
+	}
+
 	return Success;
 }
 

@@ -27,7 +27,7 @@ sim_error set::read(const unsigned long long int tag, std::vector<unsigned long 
 	return error;
 }
 
-sim_error set::write(const unsigned long long int tag, const std::vector<unsigned long long int> &data)
+sim_error set::write(const unsigned long long int tag, const std::vector<unsigned long long int> &data, const unsigned long long int word_index)
 {
 	bool found = false;
 	unsigned long long int i;
@@ -42,8 +42,13 @@ sim_error set::write(const unsigned long long int tag, const std::vector<unsigne
 
 	if (!found)
 		return CacheMiss;
+	
+	// Input data from user will be 1 word, but we can only write one block at a time, so create a new vector for the block data with the correct word changed to the input
+	std::vector <unsigned long long int> new_block_data;
+	blocks[i].read(new_block_data);
+	new_block_data[word_index] = data[0];
 
-	sim_error error = blocks[i].write(data);
+	sim_error error = blocks[i].write(new_block_data);
 	return error;
 }
 
@@ -63,7 +68,7 @@ sim_error set::replace_LRU_block(const std::vector<unsigned long long int> new_b
 			lru_index = i;
 	}
 
-	if (blocks[lru_index].is_dirty())
+	if (blocks[lru_index].is_dirty() && blocks[lru_index].is_valid())
 	{
 		flush_old_block = true;
 		error = blocks[lru_index].read(old_block);

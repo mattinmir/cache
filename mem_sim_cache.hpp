@@ -4,6 +4,7 @@
 #include "mem_sim_memory.hpp"
 #include "mem_sim_exceptions.hpp"
 #include <stdint.h>
+#include <string>
 #include "mem_sim_set.hpp"
 
 
@@ -24,13 +25,15 @@ public:
 	sim_error read(
 		const unsigned long long int address, // Starting byte address of read
 		std::vector<unsigned long long int> &data, // Variable to store read output in
-		unsigned long long int &time // How many cycles the operation took
+		unsigned long long int &time, // How many cycles the operation took
+		std::string &hitmiss // Will be "hit" if a hit or "miss" if a miss
 		);
 
 	sim_error write(
 		const unsigned long long int address, // Starting address of write
 		const  std::vector<unsigned long long int> &data, // Data to write to memory - program will write as many bytes as there are in data
-		unsigned long long int &time // How many cycles the operation took
+		unsigned long long int &time, // How many cycles the operation took
+		std::string &hitmiss // Will be "hit" if a hit or "miss" if a miss
 		);
 
 	sim_error flush(

@@ -7,7 +7,7 @@ block::block(const unsigned long long int iword_size, const unsigned long long i
 	words.assign(iblock_size, word(iword_size));
 }
 
-sim_error block::read(std::vector<unsigned long long int> &data) const
+sim_error block::read(std::vector<unsigned long long int> &data)
 {
 	sim_error error = Success;
 	for (unsigned long long int i = 0; i < words.size(); i++)
@@ -16,7 +16,9 @@ sim_error block::read(std::vector<unsigned long long int> &data) const
 		if (error)
 			return error;
 	}
-		
+	
+	age = 0;
+
 	return Success;
 }
 
@@ -29,6 +31,8 @@ sim_error block::write(const std::vector<unsigned long long int> &data)
 		if (error)
 			return error;
 	}
+
+	age = 0;
 
 	return Success;
 }
@@ -51,4 +55,19 @@ unsigned long long int block::get_tag() const
 unsigned long long int block::get_age() const
 {
 	return age;
+}
+
+void block::set_valid(bool new_valid)
+{
+	valid = new_valid;
+}
+
+void block::set_dirty(bool new_dirty)
+{
+	dirty = new_dirty;
+}
+
+void block::set_tag(unsigned long long int new_tag)
+{
+	tag = new_tag;
 }

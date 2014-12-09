@@ -19,7 +19,7 @@ public:
 	sim_error read(
 		const unsigned long long int tag, // Tag data of required block
 		std::vector<unsigned long long int> &data // Variable to store read output in
-		) const;
+		);
 
 	sim_error write(
 		const unsigned long long int tag, // Starting block_index of write

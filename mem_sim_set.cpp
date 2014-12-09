@@ -7,7 +7,7 @@ set::set(const unsigned long long int iword_size, const unsigned long long int i
 	blocks.assign(iset_size, block(iword_size, iblock_size));
 }
 
-sim_error set::read(const unsigned long long int tag, std::vector<unsigned long long int> &data) const
+sim_error set::read(const unsigned long long int tag, std::vector<unsigned long long int> &data) 
 {
 	bool found = false;
 	unsigned long long int i;

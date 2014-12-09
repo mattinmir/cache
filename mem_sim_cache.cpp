@@ -46,7 +46,8 @@ sim_error cache::read(const unsigned long long int address, std::vector<unsigned
 	// pow(2, index_size) - 1 gives a binary number of size index_size bits, with each digit 1. This is shifted up to the correct position and used as a bitmask to extract the relevant field. That is shifted back down to get the value of that field
 	unsigned long long int set_index = (address & (unsigned long long int)(pow(2, set_index_size) - 1) << (byte_index_size + word_index_size)) >> (byte_index_size + word_index_size); 
 	unsigned long long int tag = (address & (unsigned long long int)(pow(2, tag_size) - 1) << (byte_index_size + word_index_size + set_index_size)) >> (byte_index_size + word_index_size + set_index_size);
-	
+	time = 0;
+
 	sim_error error = sets[set_index].read(tag, data);
 
 	if (error == CacheMiss)
@@ -57,24 +58,72 @@ sim_error cache::read(const unsigned long long int address, std::vector<unsigned
 		std::vector<uint8_t> new_block_bytes(word_size * block_size);
 		unsigned long long int old_block_tag;
 		bool flush_needed;
+
+		// Fetch new word from memory and read it out 
+		error = mem.read(address, new_block_bytes);
+		data = bytes_to_words(new_block_bytes, word_size);
+		time += read_time;
 		
-
+		// Also put the new word in the cache using LRU replacement 
 		if (!error)
-			error = mem.read(address, new_block_bytes);
-
-		if (!error)
+		{
 			error = sets[set_index].replace_LRU_block(bytes_to_words(new_block_bytes, word_size), old_block, old_block_tag, flush_needed);
+			time += hit_time;
+		}
 
+		// If the old block was dirty, flush it to memory
 		if (!error && flush_needed)
+		{
 			// old_block_tag * block_size * word_size reconstitutes the old block's address in memory, because the tag == block address
 			error = mem.write((old_block_tag * block_size * word_size), words_to_bytes(old_block, word_size));
+			time += write_time;
+		}
 	}
-	
+	else
+		time += hit_time;
+
 	return error;
 }
 
-sim_error cache::write(const unsigned long long int address, const  std::vector<unsigned long long int> &data, unsigned long long int &time)
+sim_error cache::write(const unsigned long long int address, const std::vector<unsigned long long int> &data, unsigned long long int &time)
 {
+	unsigned long long int set_index = (address & (unsigned long long int)(pow(2, set_index_size) - 1) << (byte_index_size + word_index_size)) >> (byte_index_size + word_index_size);
+	unsigned long long int tag = (address & (unsigned long long int)(pow(2, tag_size) - 1) << (byte_index_size + word_index_size + set_index_size)) >> (byte_index_size + word_index_size + set_index_size);
+	time = 0;
+
+	sim_error error = sets[set_index].write(tag, data);
+
+	if (error == CacheMiss)
+	{
+		error = Success;
+
+		std::vector<unsigned long long int> old_block(block_size);
+		std::vector<uint8_t> new_block_bytes(word_size * block_size);
+		unsigned long long int old_block_tag;
+		bool flush_needed;
+
+		// Fetch new word from memory 
+		error = mem.read(address, new_block_bytes);
+		time += read_time;
+
+		// Put the new word in the cache using LRU replacement 
+		if (!error)
+		{
+			error = sets[set_index].replace_LRU_block(bytes_to_words(new_block_bytes, word_size), old_block, old_block_tag, flush_needed);
+			time += hit_time;
+		}
+
+		// If the old block was dirty, flush it to memory
+		if (!error && flush_needed)
+		{
+			// old_block_tag * block_size * word_size reconstitutes the old block's address in memory, because the tag == block address
+			error = mem.write((old_block_tag * block_size * word_size), words_to_bytes(old_block, word_size));
+			time += write_time;
+		}
+
+	}
+	else
+		time += hit_time;
 	return Success;
 }
 

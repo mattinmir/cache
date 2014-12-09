@@ -17,7 +17,7 @@ public:
 
 	sim_error read(
 		std::vector<unsigned long long int> &data // Variable to store read output in
-		) const;
+		);
 
 	sim_error write(
 		const std::vector<unsigned long long int> &data // Data to write to memory - program will write as many words as there are in data
@@ -32,6 +32,12 @@ public:
 	unsigned long long int get_tag() const;
 
 	unsigned long long int get_age() const;
+
+	void set_valid(bool new_valid);
+
+	void set_dirty(bool new_dirty);
+
+	void set_tag(unsigned long long int new_tag);
 
 
 private:

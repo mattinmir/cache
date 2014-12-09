@@ -25,7 +25,7 @@ public:
 		const unsigned long long int address, // Starting byte address of read
 		std::vector<unsigned long long int> &data, // Variable to store read output in
 		unsigned long long int &time // How many cycles the operation took
-		) const;
+		);
 
 	sim_error write(
 		const unsigned long long int address, // Starting address of write
@@ -40,6 +40,7 @@ public:
 	sim_error debug(unsigned long long int debug_level);
 
 	sim_error reset(); // Set all locations to 0
+
 
 private:
 	unsigned long long int word_size;

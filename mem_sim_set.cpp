@@ -52,7 +52,7 @@ unsigned long long int set::get_set_size() const
 	return set_size;
 }
 
-sim_error set::replace_LRU_block(const std::vector<unsigned long long int> new_block, std::vector<unsigned long long int> &old_block, bool &flush_old_block)
+sim_error set::replace_LRU_block(const std::vector<unsigned long long int> new_block, std::vector<unsigned long long int> &old_block, unsigned long long int &old_block_tag, bool &flush_old_block)
 {
 	sim_error error = Success;
 	unsigned long long int lru_index = 0;
@@ -67,6 +67,7 @@ sim_error set::replace_LRU_block(const std::vector<unsigned long long int> new_b
 	{
 		flush_old_block = true;
 		error = blocks[lru_index].read(old_block);
+		old_block_tag = blocks[lru_index].get_tag();
 	}
 	else
 		flush_old_block = false;

@@ -1,5 +1,6 @@
 #include "mem_sim_word.hpp"
 #include "mem_sim_exceptions.hpp"
+#include "mem_sim_utils.hpp"
 #include <vector>
 #include <stdint.h>
 
@@ -11,18 +12,16 @@ word::word(const unsigned long long int iword_size) : word_size(iword_size)
 
 sim_error word::read(unsigned long long int &data) const
 {
-	data = 0;
-	for (unsigned long long int i = 0; i < bytes.size(); i++)
-		data |= (unsigned long long int)bytes[i] << (i * 8);
-	
-	
+	std::vector<unsigned long long int> temp = bytes_to_words(bytes, word_size);
+	data = temp[0];
+		
 	return Success;
 }
 
 sim_error word::write(const unsigned long long int &data)
 {
-	for (unsigned long long int i = 0; i < bytes.size(); i++)
-		bytes[i] = (data >> (i * 8)) & (1 << 8);
+	std::vector<unsigned long long int> temp = { data };
+	bytes = words_to_bytes(temp, word_size);
 
 	return Success;
 }

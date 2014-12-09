@@ -31,6 +31,7 @@ public:
 	sim_error replace_LRU_block(
 		const std::vector<unsigned long long int> new_block, // New block to be written into cache
 		std::vector<unsigned long long int> &old_block, // Return old block value so cache can write it back to memory
+		unsigned long long int &old_block_tag, // Tag of old block so we can put it back into memory if needed
 		bool &flush_old_block
 		);
 

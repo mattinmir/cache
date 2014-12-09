@@ -4,6 +4,7 @@
 #include "mem_sim_exceptions.hpp"
 #include "mem_sim_cache.hpp"
 #include <cstdlib>
+#include <cmath>
 
 #define DEBUG_LEVEL 0
 
@@ -11,7 +12,7 @@ using namespace std;
 
 int main(int argc, char* argv[])
 {
-	unsigned long long int address_bits = atoi(argv[1]); // - '0' to get the actual digit rather than the ASCII representation
+	unsigned long long int address_bits = atoi(argv[1]); 
 	unsigned long long int bytes_per_word = atoi(argv[2]);
 	unsigned long long int words_per_block = atoi(argv[3]);
 	unsigned long long int blocks_per_set = atoi(argv[4]);
@@ -42,7 +43,10 @@ int main(int argc, char* argv[])
 		else if (cmd == "read-req")
 		{
 			cin >> address;
-			//error = c.read(address, data, bytes_per_word);
+			vector<unsigned long long int> data_vector(words_per_block);
+			error = c.read(address, data_vector, bytes_per_word);
+			unsigned long long int word_index = (address >> (unsigned long long int)log2(bytes_per_word)) % words_per_block;
+			data = to_string(data_vector[word_index]);
 		}			
 		else if (cmd == "write-req")
 		{

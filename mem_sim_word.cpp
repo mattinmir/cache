@@ -26,8 +26,3 @@ sim_error word::write(const unsigned long long int &data)
 	return Success;
 }
 
-sim_error word::reset()
-{
-	bytes.assign(word_size, 0);
-	return Success;
-}

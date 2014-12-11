@@ -6,16 +6,6 @@
 
 using namespace std;
 
-string dec2bin(unsigned long long int n)
-{
-	string result;
-
-	do result.push_back('0' + (n & 1));
-	while (n >>= 1);
-
-	reverse(result.begin(), result.end());
-	return result;
-}
 
 vector<uint8_t> words_to_bytes(const vector<unsigned long long int> words, unsigned long long int word_size)
 {

@@ -26,6 +26,7 @@ int main(int argc, char* argv[])
 	unsigned long long int address;
 	unsigned long long int time;
 	unsigned long long int dataout;
+	unsigned long long int set_index;
 	string hitmiss;
 	string datain;
 	string cmd;
@@ -36,6 +37,7 @@ int main(int argc, char* argv[])
 		address = 0;
 		time = 0;
 		dataout = 0;
+		set_index = 0;
 		datain = "";
 		hitmiss = "";
 
@@ -49,21 +51,21 @@ int main(int argc, char* argv[])
 			cin >> address;
 				
 			vector<unsigned long long int> data_vector(words_per_block);
-			error = c.read(address, data_vector, time, hitmiss);
+			error = c.read(address, data_vector, set_index, time, hitmiss);
 			unsigned long long int word_index = (address >> (unsigned long long int)log2(bytes_per_word)) % words_per_block;
 			dataout = data_vector[word_index];
 
 			if (!error)
-				cout << "read-ack " << address << " " << hitmiss << " " << time << " " << std::hex << dataout << endl;
+				cout << "read-ack " << set_index << " " << hitmiss << " " << time << " " << std::hex << dataout << endl;
 		}			
 		else if (cmd == "write-req")
 		{
 			cin >> address >> datain;
 			vector<unsigned long long int> data_vector = { stoull(datain, nullptr, 16) };
-			error = c.write(address, data_vector, time, hitmiss);
+			error = c.write(address, data_vector, set_index, time, hitmiss);
 
 			if (!error) 
-				cout << "write-ack " << address << " " << hitmiss << " " << time << endl;
+				cout << "write-ack " << set_index << " " << hitmiss << " " << time << endl;
 		}
 
 		else if (cmd == "flush-req")
@@ -73,8 +75,8 @@ int main(int argc, char* argv[])
 		}
 
 		else if (cmd == "debug-req")
+
 			cout << "debug-ack-begin" << endl << endl << "debug-ack-end" << endl;
-			
 
 		else 
 			return Error_InvalidRequest; // For invalid input

@@ -24,7 +24,6 @@ public:
 		unsigned long long int itag
 		);
 
-	sim_error reset(); // Set all locations to 0
 
 	bool is_valid() const;
 

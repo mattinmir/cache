@@ -22,7 +22,6 @@ public:
 		const std::vector<uint8_t> &data // Data to write to memory - program will write as many bytes as there are in data
 		);
 
-	sim_error reset(); // Set all locations to 0
 
 private:
 	std::vector<uint8_t> mem;

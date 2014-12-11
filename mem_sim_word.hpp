@@ -20,7 +20,6 @@ public:
 		const unsigned long long int &data // Data to write to memory - program will write as many bytes as there are in data
 		);
 
-	sim_error reset(); // Set all locations to 0
 
 private:
 	unsigned long long int word_size; // No. of bytes/word

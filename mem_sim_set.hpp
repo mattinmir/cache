@@ -27,7 +27,6 @@ public:
 		const unsigned long long int word_index
 		);
 
-	sim_error reset(); // Set all locations to 0
 
 	sim_error replace_LRU_block(
 		const std::vector<unsigned long long int> new_block, // New block to be written into cache

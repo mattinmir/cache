@@ -26,6 +26,7 @@ public:
 	sim_error read(
 		const unsigned long long int address, // Starting byte address of read
 		std::vector<unsigned long long int> &data, // Variable to store read output in
+		unsigned long long int &index, // Which set the data was read from
 		unsigned long long int &time, // How many cycles the operation took
 		std::string &hitmiss // Will be "hit" if a hit or "miss" if a miss
 		);
@@ -33,6 +34,7 @@ public:
 	sim_error write(
 		const unsigned long long int address, // Starting address of write
 		const  std::vector<unsigned long long int> &data, // Data to write to memory - program will write as many bytes as there are in data
+		unsigned long long int &index, // Which set the data was written to
 		unsigned long long int &time, // How many cycles the operation took
 		std::string &hitmiss // Will be "hit" if a hit or "miss" if a miss
 		);
@@ -42,8 +44,6 @@ public:
 		);
 
 	sim_error debug(unsigned long long int debug_level);
-
-	sim_error reset(); // Set all locations to 0
 
 	
 

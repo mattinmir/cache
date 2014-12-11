@@ -34,6 +34,9 @@ cache::cache(
 
 sim_error cache::read(const unsigned long long int address, std::vector<unsigned long long int> &data, unsigned long long int &time, std::string &hitmiss)
 {
+	if (address % word_size != 0)
+		return Error_MisalignedAddress;
+
 	/*
 					 set_index_size (bits)
 	                  <----------->
@@ -49,6 +52,7 @@ sim_error cache::read(const unsigned long long int address, std::vector<unsigned
 	unsigned long long int tag = (address & (unsigned long long int)(pow(2, tag_size) - 1) << (byte_index_size + word_index_size + set_index_size)) >> (byte_index_size + word_index_size + set_index_size);
 	time = 0;
 
+	
 	sim_error error = sets[set_index].read(tag, data);
 
 	if (error == CacheMiss)
@@ -81,7 +85,7 @@ sim_error cache::read(const unsigned long long int address, std::vector<unsigned
 			time += write_time;
 		}
 	}
-	else
+	else if (!error)
 	{
 		time += hit_time;
 		hitmiss = "hit";
@@ -93,6 +97,9 @@ sim_error cache::read(const unsigned long long int address, std::vector<unsigned
 
 sim_error cache::write(const unsigned long long int address, const std::vector<unsigned long long int> &data, unsigned long long int &time, std::string &hitmiss)
 {
+	if (address % word_size != 0)
+		return Error_MisalignedAddress;
+
 	unsigned long long int word_index = (address & (unsigned long long int)(pow(2, word_index_size) - 1) << (byte_index_size) >> byte_index_size);
 	unsigned long long int set_index = (address & (unsigned long long int)(pow(2, set_index_size) - 1) << (byte_index_size + word_index_size)) >> (byte_index_size + word_index_size);
 	unsigned long long int tag = (address & (unsigned long long int)(pow(2, tag_size) - 1) << (byte_index_size + word_index_size + set_index_size)) >> (byte_index_size + word_index_size + set_index_size);
@@ -133,7 +140,7 @@ sim_error cache::write(const unsigned long long int address, const std::vector<u
 
 	}
 
-	else
+	else if (!error)
 	{
 		time += hit_time;
 		hitmiss = "hit";
@@ -156,7 +163,7 @@ sim_error cache::flush(unsigned long long int &time)
 	for (it2 = block_data.begin(); it2 != block_data.end() && !error; ++it2)
 	{
 		error = mem.write((it2->tag * block_size * word_size), it2->data);
-		time += write_time;
+		time += hit_time + write_time; //Read from cache and store in memory
 	}
 
 	return error;

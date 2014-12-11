@@ -57,7 +57,7 @@ sim_error set::write(const unsigned long long int tag, const std::vector<unsigne
 	blocks[i].read(new_block_data); 
 	new_block_data[word_index] = data[0];
 
-	sim_error error = blocks[i].write(new_block_data); 
+	sim_error error = blocks[i].write(new_block_data, tag); 
 	if (!error)
 		blocks[i].set_dirty(true);
 
@@ -83,7 +83,7 @@ sim_error set::replace_LRU_block(const std::vector<unsigned long long int> new_b
 			found_empty = true;
 			lru_index = i;
 			if (!error)
-				error = blocks[lru_index].write(new_block);
+				error = blocks[lru_index].write(new_block, new_block_tag);
 			if (!error)
 			{
 				blocks[lru_index].set_valid(true);
@@ -120,7 +120,7 @@ sim_error set::replace_LRU_block(const std::vector<unsigned long long int> new_b
 			flush_old_block = false;
 
 		if (!error)
-			error = blocks[lru_index].write(new_block);
+			error = blocks[lru_index].write(new_block, new_block_tag);
 
 		if (!error)
 		{
@@ -141,10 +141,10 @@ sim_error set::flush(std::vector<block_data_t> &block_data, unsigned long long i
 	sim_error error;
 	block_data = {};
 	std::vector<block>::iterator it;
-	std::vector<unsigned long long int> data;
+	std::vector<unsigned long long int> data(block_size);
 	for (it = blocks.begin(); it != blocks.end(); ++it)
 	{
-		if (it->is_dirty())
+		if (it->is_dirty() && it->is_valid())
 		{
 			it->read(data);
 			block_data.push_back({ it->get_tag(), words_to_bytes(data, word_size) });

@@ -20,7 +20,8 @@ public:
 		);
 
 	sim_error write(
-		const std::vector<unsigned long long int> &data // Data to write to memory - program will write as many words as there are in data
+		const std::vector<unsigned long long int> &data,
+		unsigned long long int itag
 		);
 
 	sim_error reset(); // Set all locations to 0

@@ -41,13 +41,13 @@ int main(int argc, char* argv[])
 
 		cin >> cmd;
 
-		if (cmd == "end")
+		if (cin.eof())
 			finished = true;
 
 		else if (cmd == "read-req")
 		{
 			cin >> address;
-
+				
 			vector<unsigned long long int> data_vector(words_per_block);
 			error = c.read(address, data_vector, time, hitmiss);
 			unsigned long long int word_index = (address >> (unsigned long long int)log2(bytes_per_word)) % words_per_block;
@@ -62,7 +62,7 @@ int main(int argc, char* argv[])
 			vector<unsigned long long int> data_vector = { stoull(datain, nullptr, 16) };
 			error = c.write(address, data_vector, time, hitmiss);
 
-			if (!error)
+			if (!error) 
 				cout << "write-ack " << address << " " << hitmiss << " " << time << endl;
 		}
 

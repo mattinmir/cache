@@ -10,6 +10,7 @@ typedef enum _sim_error
 	Error_DataExceedsMemoryWidth = 0x102,
 	Error_IndexExceedsContainerSize = 0x103,
 	Error_InvalidCacheParameters = 0x104,
+	Error_MisalignedAddress = 0x105,
 	
 	CacheMiss = 0x200
 

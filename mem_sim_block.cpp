@@ -23,7 +23,7 @@ sim_error block::read(std::vector<unsigned long long int> &data)
 	return Success;
 }
 
-sim_error block::write(const std::vector<unsigned long long int> &data)
+sim_error block::write(const std::vector<unsigned long long int> &data, unsigned long long int itag)
 {
 	sim_error error = Success;
 	for (unsigned long long int i = 0; i < words.size(); i++)
@@ -32,6 +32,7 @@ sim_error block::write(const std::vector<unsigned long long int> &data)
 		if (error)
 			return error;
 	}
+	tag = itag;
 
 	age = 0;
 

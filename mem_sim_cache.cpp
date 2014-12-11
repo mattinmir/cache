@@ -155,16 +155,17 @@ sim_error cache::flush(unsigned long long int &time)
 	sim_error error;
 	std::vector<block_data_t> block_data;
 	std::vector<set>::iterator it;
-	for (it = sets.begin(); it != sets.end(); ++it)
-	{
-		error = it->flush(block_data, word_size);
-	}
-
 	std::vector<block_data_t>::iterator it2;
-	for (it2 = block_data.begin(); it2 != block_data.end() && !error; ++it2)
+
+	for (it = sets.begin(); it != sets.end() && !error; ++it) // For each set
 	{
-		error = mem.write((it2->tag * block_size * word_size), it2->data);
-		time += hit_time + write_time; //Read from cache and store in memory
+		error = it->flush(block_data, word_size); // Get a list of the dirty blocks
+
+		for (it2 = block_data.begin(); it2 != block_data.end() && !error; ++it2)// And flush them
+		{
+			error = mem.write((it2->tag * block_size * word_size), it2->data);
+			time += hit_time + write_time; // Time for read from cache and store in memory
+		}
 	}
 
 	return error;

@@ -100,7 +100,8 @@ sim_error cache::write(const unsigned long long int address, const std::vector<u
 	if (address % word_size != 0)
 		return Error_MisalignedAddress;
 
-	unsigned long long int word_index = (address & (unsigned long long int)(pow(2, word_index_size) - 1) << (byte_index_size) >> byte_index_size);
+	unsigned long long int byte_index = (address & (unsigned long long int)(pow(2, byte_index_size) - 1));
+	unsigned long long int word_index = ((address & (unsigned long long int)(pow(2, word_index_size) - 1) << byte_index_size) >> byte_index_size);
 	unsigned long long int set_index = (address & (unsigned long long int)(pow(2, set_index_size) - 1) << (byte_index_size + word_index_size)) >> (byte_index_size + word_index_size);
 	unsigned long long int tag = (address & (unsigned long long int)(pow(2, tag_size) - 1) << (byte_index_size + word_index_size + set_index_size)) >> (byte_index_size + word_index_size + set_index_size);
 	time = 0;
@@ -134,8 +135,8 @@ sim_error cache::write(const unsigned long long int address, const std::vector<u
 		// If the old block was dirty, flush it to memory
 		if (!error && flush_needed)
 		{
-			// old_block_tag * block_size * word_size reconstitutes the old block's address in memory, because the tag == block address
-			error = mem.write((old_block_tag * block_size * word_size), words_to_bytes(old_block, word_size));
+			
+			error = mem.write((old_block_tag * block_size * word_size), words_to_bytes(old_block, word_size)); //////////////////////////////////////////////////
 			time += write_time;
 		}
 

@@ -1,10 +1,11 @@
+#include "mem_sim_cache.hpp"
+#include "mem_sim_exceptions.hpp"
 #include <iostream>
 #include <string>
 #include <stdint.h>
-#include "mem_sim_exceptions.hpp"
-#include "mem_sim_cache.hpp"
 #include <cstdlib>
 #include <cmath>
+#include <sstream>
 
 #define DEBUG_LEVEL 0
 
@@ -61,7 +62,14 @@ int main(int argc, char* argv[])
 		else if (cmd == "write-req")
 		{
 			cin >> address >> datain;
-			vector<unsigned long long int> data_vector = { stoull(datain, nullptr, 16) };
+
+			stringstream ss;
+			unsigned long long int data;
+
+			ss << std::hex << datain;
+			ss >> data;
+
+			vector<unsigned long long int> data_vector(1, data);
 			error = c.write(address, data_vector, set_index, time, hitmiss);
 
 			if (!error) 
@@ -77,6 +85,9 @@ int main(int argc, char* argv[])
 		else if (cmd == "debug-req")
 
 			cout << "debug-ack-begin" << endl << endl << "debug-ack-end" << endl;
+
+		else if (cmd.at(0) == '#') // Do nothing for comments
+			getline(cin, cmd);
 
 		else 
 			return Error_InvalidRequest; // For invalid input

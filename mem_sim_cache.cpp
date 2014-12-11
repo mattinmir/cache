@@ -80,8 +80,8 @@ sim_error cache::read(const unsigned long long int address, std::vector<unsigned
 		// If the old block was dirty, flush it to memory
 		if (!error && flush_needed)
 		{
-			// old_block_tag * block_size * word_size reconstitutes the old block's address in memory, because the tag == block address
-			error = mem.write((old_block_tag * block_size * word_size), words_to_bytes(old_block, word_size));
+			unsigned long long int old_block_address = ((old_block_tag << (byte_index_size + word_index_size + set_index_size)) | set_index << (byte_index_size + word_index_size));			
+			error = mem.write(old_block_address, words_to_bytes(old_block, word_size));
 			time += write_time;
 		}
 	}
@@ -135,8 +135,8 @@ sim_error cache::write(const unsigned long long int address, const std::vector<u
 		// If the old block was dirty, flush it to memory
 		if (!error && flush_needed)
 		{
-			
-			error = mem.write((old_block_tag * block_size * word_size), words_to_bytes(old_block, word_size)); //////////////////////////////////////////////////
+			unsigned long long int old_block_address = ((old_block_tag << (byte_index_size + word_index_size + set_index_size)) | set_index << (byte_index_size + word_index_size));
+			error = mem.write(old_block_address, words_to_bytes(old_block, word_size)); //////////////////////////////////////////////////
 			time += write_time;
 		}
 

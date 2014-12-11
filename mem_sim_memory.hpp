@@ -1,8 +1,8 @@
 #ifndef MEM_SIM_MEMORY_HPP
 #define MEM_SIM_MEMORY_HPP
 
-#include <vector>
 #include "mem_sim_exceptions.hpp"
+#include <vector>
 #include <stdint.h>
 
 class memory

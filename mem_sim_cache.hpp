@@ -4,10 +4,9 @@
 #include "mem_sim_memory.hpp"
 #include "mem_sim_exceptions.hpp"
 #include "mem_sim_utils.hpp"
+#include "mem_sim_set.hpp"
 #include <stdint.h>
 #include <string>
-#include "mem_sim_set.hpp"
-
 
 class cache 
 {

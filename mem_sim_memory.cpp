@@ -14,7 +14,7 @@ sim_error memory::read(const unsigned long long int address, std::vector<uint8_t
 	if (address + data.size() > mem.size())
 		return Error_IndexExceedsContainerSize;
 
-	for (unsigned long long int i = address, j = 0; i < data.size(); i++, j++)
+	for (unsigned long long int i = address, j = 0; i < address + data.size(); i++, j++)
 		data[j] = mem[i];
 
 	return Success;
@@ -27,7 +27,7 @@ sim_error memory::write(const unsigned long long int address, const std::vector<
 	if (address + data.size() > mem.size())
 		return Error_IndexExceedsContainerSize;
 
-	for (unsigned long long int i = address, j = 0; i < data.size(); i++, j++)
+	for (unsigned long long int i = address, j = 0; i < address + data.size(); i++, j++)
 		mem[i] = data[j];
 
 	return Success;

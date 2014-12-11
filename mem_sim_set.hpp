@@ -2,11 +2,10 @@
 #define MEM_SIM_SET_HPP
 
 #include "mem_sim_exceptions.hpp"
-#include <vector>
 #include "mem_sim_block.hpp"
+#include "mem_sim_utils.hpp"
+#include <vector>
 #include <string>
-
-
 class set
 {
 public:

@@ -1,5 +1,6 @@
-#include "mem_sim_cache.hpp"
+
 #include "mem_sim_set.hpp"
+#include "mem_sim_cache.hpp"
 #include "mem_sim_block.hpp"
 #include "mem_sim_utils.hpp"
 #include "mem_sim_exceptions.hpp"

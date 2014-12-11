@@ -2,9 +2,8 @@
 #define MEM_SIM_BLOCK_HPP
 
 #include "mem_sim_exceptions.hpp"
-#include <vector>
 #include "mem_sim_word.hpp"
-
+#include <vector>
 
 
 class block

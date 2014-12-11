@@ -3,7 +3,14 @@
 #include <string>
 #include <vector>
 #include <stdint.h>
+#include <stdint.h>
 
+typedef struct _block_data_t
+{
+	unsigned long long int tag;
+
+	std::vector<uint8_t> data;
+}block_data_t;
 
 std::string dec2bin(unsigned long long int n);
 

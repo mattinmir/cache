@@ -67,12 +67,14 @@ int main(int argc, char* argv[])
 		}
 
 		else if (cmd == "flush-req")
-			;
-		//c.flush();
+		{
+			c.flush(time);
+			cout << "flush-ack " << time << endl;
+		}
 
 		else if (cmd == "debug-req")
 			cout << "debug-ack-begin" << endl << endl << "debug-ack-end" << endl;
-			//c.debug(DEBUG_LEVEL);
+			
 
 		else 
 			return Error_InvalidRequest; // For invalid input

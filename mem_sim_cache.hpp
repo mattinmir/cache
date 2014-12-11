@@ -3,6 +3,7 @@
 
 #include "mem_sim_memory.hpp"
 #include "mem_sim_exceptions.hpp"
+#include "mem_sim_utils.hpp"
 #include <stdint.h>
 #include <string>
 #include "mem_sim_set.hpp"
@@ -44,6 +45,7 @@ public:
 
 	sim_error reset(); // Set all locations to 0
 
+	
 
 private:
 	unsigned long long int word_size;

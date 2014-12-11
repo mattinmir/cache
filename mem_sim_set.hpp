@@ -40,6 +40,11 @@ public:
 
 	unsigned long long int get_set_size() const;
 
+	sim_error flush(
+		std::vector<block_data_t> &block_data, // Holds the tag and byte vectors of blocks to be flushed
+		unsigned long long int word_size
+		);
+
 private:
 	unsigned long long int set_size;
 	unsigned long long int block_size;

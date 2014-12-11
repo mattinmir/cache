@@ -144,7 +144,22 @@ sim_error cache::write(const unsigned long long int address, const std::vector<u
 
 sim_error cache::flush(unsigned long long int &time)
 {
-	return Success;
+	sim_error error;
+	std::vector<block_data_t> block_data;
+	std::vector<set>::iterator it;
+	for (it = sets.begin(); it != sets.end(); ++it)
+	{
+		error = it->flush(block_data, word_size);
+	}
+
+	std::vector<block_data_t>::iterator it2;
+	for (it2 = block_data.begin(); it2 != block_data.end() && !error; ++it2)
+	{
+		error = mem.write((it2->tag * block_size * word_size), it2->data);
+		time += write_time;
+	}
+
+	return error;
 }
 
 sim_error cache::debug(unsigned long long int debug_level)

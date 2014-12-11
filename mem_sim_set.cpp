@@ -1,5 +1,7 @@
+#include "mem_sim_cache.hpp"
 #include "mem_sim_set.hpp"
 #include "mem_sim_block.hpp"
+#include "mem_sim_utils.hpp"
 #include "mem_sim_exceptions.hpp"
 
 set::set(const unsigned long long int iword_size, const unsigned long long int iblock_size, const unsigned long long int iset_size) 
@@ -132,4 +134,23 @@ sim_error set::replace_LRU_block(const std::vector<unsigned long long int> new_b
 	}
 
 	return error;
+}
+
+sim_error set::flush(std::vector<block_data_t> &block_data, unsigned long long int word_size)
+{
+	sim_error error;
+	block_data = {};
+	std::vector<block>::iterator it;
+	std::vector<unsigned long long int> data;
+	for (it = blocks.begin(); it != blocks.end(); ++it)
+	{
+		if (it->is_dirty())
+		{
+			it->read(data);
+			block_data.push_back({ it->get_tag(), words_to_bytes(data, word_size) });
+			it->set_dirty(false);
+		}
+	}
+
+	return Success;
 }

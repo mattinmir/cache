@@ -18,7 +18,7 @@ vector<uint8_t> words_to_bytes(const vector<unsigned long long int> words, unsig
 		for (unsigned long long int j = i * word_size; j < (i * word_size) + word_size; j++)
 			// Find the correct byte of the word by shifting right by 8 bits * that byte's position in the word and extract with a bitmask.
 			// e.g. to get the 2nd byte (position 1) of the word, shift the word 1 byte to the right then AND with 0xFF to extract it
-			bytes[j] = (uint8_t)(words[i] >> (8 * (word_size - 1 - (j % word_size))) & 0xFF); 
+			bytes[j] = (uint8_t)(words[i] >> (8 * (j % word_size)) & 0xFF); 
 	}
 
 	return bytes;

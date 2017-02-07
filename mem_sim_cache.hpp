@@ -98,16 +98,18 @@ sim_error cache::read(const unsigned long long int address, std::vector<unsigned
 		return Error_MisalignedAddress;
 
 	/*
-	set_index_size (bits)
-	<----------->
-	___________________________________________
-	|     |           |            |            |
+	                    set_index_size (bits)
+	                      <----------->
+	                ___________________________________________
+	                |     |           |            |            |
 	address:	| Tag | Set_Index | Word_index | Byte_index |
-	|_____|___________|____________|____________|
+	                |_____|___________|____________|____________|
 
 	*/
 
-	// pow(2, index_size) - 1 gives a binary number of size index_size bits, with each digit 1. This is shifted up to the correct position and used as a bitmask to extract the relevant field. That is shifted back down to get the value of that field
+	// pow(2, index_size) - 1 gives a binary number of size index_size bits, with each digit 1. 
+	// This is shifted up to the correct position and used as a bitmask to extract the relevant field. 
+	// That is shifted back down to get the value of that field
 	unsigned long long int set_index = (address & (unsigned long long int)(pow(2, set_index_size) - 1) << (byte_index_size + word_index_size)) >> (byte_index_size + word_index_size);
 	unsigned long long int tag = (address & (unsigned long long int)(pow(2, tag_size) - 1) << (byte_index_size + word_index_size + set_index_size)) >> (byte_index_size + word_index_size + set_index_size);
 	time = 0;
